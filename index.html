@@ -1,23 +1,55 @@
-<!-- index.html -->
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
-  <title>Control ESP32</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Control Remoto ESP32</title>
+  <style>
+    body { font-family: sans-serif; text-align: center; margin-top: 50px; }
+    button {
+      font-size: 1.5em;
+      padding: 15px 30px;
+      margin: 20px;
+      cursor: pointer;
+    }
+    .status {
+      margin-top: 30px;
+      font-size: 1.2em;
+    }
+  </style>
 </head>
 <body>
   <h1>Control remoto del relé</h1>
   <button onclick="enviar('ON')">Encender</button>
   <button onclick="enviar('OFF')">Apagar</button>
 
+  <div class="status" id="estado">Conectando...</div>
+
   <script>
+    // Cambia esta dirección por la IP pública o URL de ngrok de tu ESP32
     const socket = new WebSocket("tcp://2.tcp.eu.ngrok.io:14737");
 
-    socket.onopen = () => console.log("Conectado a ESP32");
-    socket.onclose = () => console.log("Desconectado");
-    socket.onerror = e => console.error("Error: ", e);
+    socket.onopen = () => {
+      console.log("Conectado a ESP32");
+      document.getElementById("estado").innerText = "Conectado al ESP32";
+    };
+
+    socket.onclose = () => {
+      console.log("Desconectado del ESP32");
+      document.getElementById("estado").innerText = "Desconectado";
+    };
+
+    socket.onerror = (e) => {
+      console.error("Error WebSocket: ", e);
+      document.getElementById("estado").innerText = "Error de conexión";
+    };
 
     function enviar(msg) {
-      socket.send(msg);
+      if (socket.readyState === WebSocket.OPEN) {
+        socket.send(msg);
+      } else {
+        alert("Conexión no establecida aún.");
+      }
     }
   </script>
 </body>
