@@ -27,7 +27,7 @@
 
   <script>
     // Cambia esta dirección por la IP pública o URL de ngrok de tu ESP32
-    const socket = new WebSocket("tcp://2.tcp.eu.ngrok.io:11676");
+    const socket = new WebSocket("tcp://2.tcp.eu.ngrok.io:11676:81");
 
     socket.onopen = () => {
       console.log("Conectado a ESP32");
