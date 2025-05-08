@@ -10,7 +10,7 @@
   <button onclick="enviar('OFF')">Apagar</button>
 
   <script>
-    const socket = new WebSocket("ws://TU_IP_PUBLICA_O_NGROK:81");
+    const socket = new WebSocket("tcp://2.tcp.eu.ngrok.io:14737");
 
     socket.onopen = () => console.log("Conectado a ESP32");
     socket.onclose = () => console.log("Desconectado");
